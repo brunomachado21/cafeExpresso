@@ -67,51 +67,58 @@ public class Main {
         System.out.println("----------------------------------\n");
 
         Scanner leitor = new Scanner(System.in);
-                    Estoque testeBusca = new Estoque();
-            testeBusca.adicionarProduto(new Produto("Agua", 2.0, 5));
-            if (testeBusca.buscarProduto("Agua") != null && testeBusca.buscarProduto("Inexistente") == null) {
-                System.out.println("[PASSOU] Busca de produto.");
-            } else {
-                System.out.println("[FALHOU] Busca de produto.");
+                            Estoque estoque = new Estoque();
+        int opcao = 0;
+
+        while (opcao != 4) {
+            System.out.println("\n--- SISTEMA CAFE EXPRESSO ---");
+            System.out.println("1. Cadastrar Produto");
+            System.out.println("2. Buscar Produto");
+            System.out.println("3. Resumo do Estoque");
+            System.out.println("4. Sair");
+            System.out.print("Escolha: ");
+            
+            if (!leitor.hasNextInt()) {
+                System.out.println("Opcao invalida!");
+                leitor.nextLine();
+                continue;
             }
-            Produto pDesconto = new Produto("Cafe", 10.0, 2);
-            pDesconto.aplicarDesconto(10.0); // 10% de desconto em 20.0 = 18.0
-            if (pDesconto.getTotalItem() == 18.0) {
-                System.out.println("[PASSOU] Calculo de desconto no item.");
-            } else {
-                System.out.println("[FALHOU] Calculo de desconto no item.");
+            opcao = leitor.nextInt();
+            leitor.nextLine();
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Nome: "); String n = leitor.nextLine();
+                    System.out.print("Preco: "); double p = leitor.nextDouble();
+                    System.out.print("Qtd: "); int q = leitor.nextInt();
+                    estoque.adicionarProduto(new Produto(n, p, q));
+                    System.out.println("Cadastrado com sucesso!");
+                    break;
+                case 2:
+                    System.out.print("Nome do produto a buscar: ");
+                    Produto buscado = estoque.buscarProduto(leitor.nextLine());
+                    if (buscado != null) {
+                        System.out.println("Encontrado: " + buscado.getNome() + " | Qtd: " + buscado.getQuantidade());
+                    } else {
+                        System.out.println("Produto nao existe no estoque.");
+                    }
+                    break;
+                case 3:
+                    System.out.println("\n=== RESUMO ===");
+                    for (Produto prod : estoque.getProdutos()) {
+                        System.out.printf("%s | Qtd: %d | Subtotal: R$ %.2f%n", prod.getNome(), prod.getQuantidade(), prod.getTotalItem());
+                    }
+                    System.out.printf("TOTAL: R$ %.2f%n", estoque.calcularTotalEstoque());
+                    break;
+                case 4:
+                    System.out.println("A encerrar...");
+                    break;
+                default:
+                    System.out.println("Opcao inexistente.");
             }
-
-
-        String continuar = "s";
-
-        System.out.println("--- Sistema Café Expresso: Cadastro ---");
-
-        while (continuar.equalsIgnoreCase("s")) {
-            System.out.print("\nDigite o nome do produto: ");
-            String nome = leitor.nextLine();
-
-            System.out.print("Digite o preço unitário: ");
-            double preco = leitor.nextDouble();
-
-            System.out.print("Digite a quantidade em estoque: ");
-            int qtd = leitor.nextInt();
-
-            estoque.adicionarProduto(new Produto(nome, preco, qtd));
-
-            leitor.nextLine(); 
-            System.out.print("Deseja cadastrar outro produto? (s/n): ");
-            continuar = leitor.nextLine();
         }
-
-        System.out.println("\n=== RESUMO DO ESTOQUE ===");
-        for (Produto p : estoque.getProdutos()) {
-            System.out.printf("Produto: %-15s | Qtd: %d | Preço: R$ %.2f | Subtotal: R$ %.2f%n", 
-                p.getNome(), p.getQuantidade(), p.getPrecoUnitario(), p.getTotalItem());
-        }
-
-        System.out.printf("\nVALOR TOTAL DO ESTOQUE: R$ %.2f%n", estoque.calcularTotalEstoque());
         leitor.close();
+
     }
 
     // Tentar simular o JUnit porque tudo está em um arquivo só
