@@ -39,6 +39,13 @@ class Estoque {
         return total;
     }
 }
+    public Produto buscarProduto(String nome) {
+        for (Produto p : produtos) {
+            if (p.getNome().equalsIgnoreCase(nome)) return p;
+        }
+        return null;
+    }
+
 
 // 3. INTERFACE E "TESTE" MANUAL (O problema real)
 public class Main {
@@ -49,7 +56,14 @@ public class Main {
         System.out.println("----------------------------------\n");
 
         Scanner leitor = new Scanner(System.in);
-        Estoque estoque = new Estoque();
+                    Estoque testeBusca = new Estoque();
+            testeBusca.adicionarProduto(new Produto("Agua", 2.0, 5));
+            if (testeBusca.buscarProduto("Agua") != null && testeBusca.buscarProduto("Inexistente") == null) {
+                System.out.println("[PASSOU] Busca de produto.");
+            } else {
+                System.out.println("[FALHOU] Busca de produto.");
+            }
+
         String continuar = "s";
 
         System.out.println("--- Sistema Café Expresso: Cadastro ---");
