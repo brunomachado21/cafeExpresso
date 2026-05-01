@@ -20,7 +20,18 @@ class Produto {
     public String getNome() { return nome; }
     public double getPrecoUnitario() { return precoUnitario; }
     public int getQuantidade() { return quantidade; }
-    public double getTotalItem() { return precoUnitario * quantidade; }
+    private double percentagemDesconto = 0.0;
+
+    public void aplicarDesconto(double percentagem) {
+        if (percentagem >= 0 && percentagem <= 100) {
+            this.percentagemDesconto = percentagem;
+        }
+    }
+
+    public double getTotalItem() { 
+        double totalBruto = precoUnitario * quantidade;
+        return totalBruto - (totalBruto * (percentagemDesconto / 100)); 
+    }
 }
 
 // 2. REGRA DE NEGÓCIO (Acoplada)
@@ -63,6 +74,14 @@ public class Main {
             } else {
                 System.out.println("[FALHOU] Busca de produto.");
             }
+            Produto pDesconto = new Produto("Cafe", 10.0, 2);
+            pDesconto.aplicarDesconto(10.0); // 10% de desconto em 20.0 = 18.0
+            if (pDesconto.getTotalItem() == 18.0) {
+                System.out.println("[PASSOU] Calculo de desconto no item.");
+            } else {
+                System.out.println("[FALHOU] Calculo de desconto no item.");
+            }
+
 
         String continuar = "s";
 
